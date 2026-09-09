@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hand Gesture Control — نمایشگر زنده</title>
+<style>
+  :root {
+    --bg: #0B0D10;
+    --panel: #12151A;
+    --panel-2: #171B21;
+    --border: #232830;
+    --text: #E7E9EA;
+    --text-dim: #7C8590;
+    --accent: #4DD8C0;
+    --accent-glow: rgba(77, 216, 192, 0.28);
+    --amber: #F2A65A;
+    --danger: #E5484D;
+    --mono: ui-monospace, "Cascadia Code", "SFMono-Regular", Consolas, "Liberation Mono", "JetBrains Mono", monospace;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--mono);
+  }
+
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--danger);
+    flex-shrink: 0;
+  }
+  .dot.connected {
+    background: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-glow);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: .55; }
+  }
+
+  .eyebrow {
+    font-size: 11px;
+    letter-spacing: .12em;
+    color: var(--text-dim);
+  }
+  .eyebrow b { color: var(--text); font-weight: 600; }
+
+  .endpoints {
+    font-size: 11px;
+    color: var(--text-dim);
+    text-align: left;
+    direction: ltr;
+    line-height: 1.6;
+  }
+  .endpoints b { color: var(--accent); font-weight: 600; }
+
+  main {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 18px;
+    padding: 18px 20px 26px;
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+
+  @media (max-width: 900px) {
+    main { grid-template-columns: 1fr; }
+  }
+
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .panel-title {
+    font-size: 11px;
+    letter-spacing: .1em;
+    color: var(--text-dim);
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .viewfinder {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    background: #000;
+  }
+  .viewfinder img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .corner {
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    border: 2px solid var(--accent);
+    opacity: .85;
+    pointer-events: none;
+  }
+  .corner.tl { top: 10px; left: 10px; border-right: none; border-bottom: none; }
+  .corner.tr { top: 10px; right: 10px; border-left: none; border-bottom: none; }
+  .corner.bl { bottom: 10px; left: 10px; border-right: none; border-top: none; }
+  .corner.br { bottom: 10px; right: 10px; border-left: none; border-top: none; }
+
+  .video-caption {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 14px;
+    font-size: 11px;
+    color: var(--text-dim);
+    border-top: 1px solid var(--border);
+  }
+
+  .side { display: flex; flex-direction: column; gap: 18px; }
+
+  .last-code {
+    padding: 18px 14px 20px;
+    text-align: center;
+  }
+  .last-code .value {
+    font-size: 56px;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+    direction: ltr;
+  }
+  .last-code .value.cat-gesture { color: var(--amber); }
+  .last-code .value.cat-movement { color: var(--accent); }
+  .last-code .id {
+    margin-top: 10px;
+    font-size: 12px;
+    color: var(--text-dim);
+    direction: ltr;
+  }
+  .last-code .hand-badge {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 10px;
+    letter-spacing: .08em;
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 2px 8px;
+  }
+
+  .log {
+    max-height: 420px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column-reverse;
+  }
+  .log-row {
+    display: grid;
+    grid-template-columns: 62px 28px 1fr 24px;
+    gap: 8px;
+    align-items: center;
+    padding: 6px 14px;
+    font-size: 11px;
+    border-bottom: 1px solid var(--border);
+    direction: ltr;
+    animation: fadeIn .25s ease-out;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .log-row { animation: none; }
+    .dot.connected { animation: none; }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-3px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .log-time { color: var(--text-dim); }
+  .log-code {
+    text-align: center;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .log-code.cat-gesture { color: var(--amber); }
+  .log-id { color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .log-hand { color: var(--text-dim); text-align: left; }
+
+  .empty-state {
+    padding: 24px 14px;
+    color: var(--text-dim);
+    font-size: 12px;
+    text-align: center;
+  }
+
+  footer {
+    padding: 14px 20px 24px;
+    max-width: 1280px;
+    margin: 0 auto;
+    font-size: 11px;
+    color: var(--text-dim);
+    line-height: 1.7;
+  }
+  footer b { color: var(--text); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <span id="status-dot" class="dot"></span>
+    <span class="eyebrow"><b>HAND GESTURE CONTROL</b> · نمایشگر زنده</span>
+  </div>
+  <div class="endpoints">
+    HTTP&nbsp;&nbsp;http://{{ web_host }}:{{ web_port }}<br>
+    WS&nbsp;&nbsp;&nbsp;&nbsp;ws://{{ ws_host }}:{{ ws_port }}
+  </div>
+</header>
+
+<main>
+  <div class="panel">
+    <div class="viewfinder">
+      <img id="feed" src="/video_feed" alt="تصویر زنده دوربین">
+      <span class="corner tl"></span>
+      <span class="corner tr"></span>
+      <span class="corner bl"></span>
+      <span class="corner br"></span>
+    </div>
+    <div class="video-caption">
+      <span>دوربین + ردیابی دست</span>
+      <span>21 نقطه · بلادرنگ</span>
+    </div>
+  </div>
+
+  <div class="side">
+    <div class="panel">
+      <div class="panel-title">آخرین دستور</div>
+      <div class="last-code">
+        <div id="last-value" class="value">—</div>
+        <div id="last-id" class="id">در انتظار حرکت دست...</div>
+        <div id="last-hand" class="hand-badge" style="display:none;"></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">جریان زنده دستورات (LOG)</div>
+      <div id="log" class="log">
+        <div class="empty-state" id="log-empty">هنوز دستوری دریافت نشده</div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  این آدرس WebSocket (<b>ws://{{ ws_host }}:{{ ws_port }}</b>) همان کانال بلادرنگی است که این صفحه
+  به آن وصل شده؛ هر برنامه یا اسکریپت دیگری روی همین سیستم (رباتیک، اتوماسیون، نرم‌افزار دیگر)
+  هم می‌تواند مستقیماً به همین آدرس وصل شود و دستورات JSON را دریافت کند. نمونه اتصال از سمت پایتون
+  در README.md پروژه آمده است.
+</footer>
+
+<script>
+  const WS_HOST = "{{ ws_host }}";
+  const WS_PORT = {{ ws_port }};
+
+  const statusDot = document.getElementById('status-dot');
+  const lastValueEl = document.getElementById('last-value');
+  const lastIdEl = document.getElementById('last-id');
+  const lastHandEl = document.getElementById('last-hand');
+  const logEl = document.getElementById('log');
+  const logEmptyEl = document.getElementById('log-empty');
+
+  const MAX_LOG_ROWS = 60;
+  let ws;
+
+  function handLabel(hand) {
+    return hand === 'Left' ? 'چپ' : 'راست';
+  }
+
+  function connect() {
+    ws = new WebSocket(`ws://${WS_HOST}:${WS_PORT}`);
+
+    ws.onopen = () => statusDot.classList.add('connected');
+    ws.onclose = () => {
+      statusDot.classList.remove('connected');
+      setTimeout(connect, 1500); // تلاش مجدد برای اتصال
+    };
+    ws.onerror = () => ws.close();
+
+    ws.onmessage = (event) => {
+      let cmd;
+      try { cmd = JSON.parse(event.data); } catch (e) { return; }
+
+      // فریم‌های پرحجم داده کامل ریگ دست در این نمایشگر نشان داده نمی‌شوند
+      // (چون خودِ تصویر زنده همین اطلاعات را به‌صورت بصری نشان می‌دهد)
+      if (cmd.category === 'rig') return;
+
+      lastValueEl.textContent = cmd.code;
+      lastValueEl.className = 'value cat-' + cmd.category;
+      lastIdEl.textContent = cmd.command_id;
+      lastHandEl.textContent = handLabel(cmd.hand);
+      lastHandEl.style.display = 'inline-block';
+
+      if (logEmptyEl) { logEmptyEl.remove(); }
+
+      const t = new Date(cmd.timestamp * 1000);
+      const time = t.toLocaleTimeString('en-GB', { hour12: false }) + '.' +
+                   String(t.getMilliseconds()).padStart(3, '0');
+
+      const row = document.createElement('div');
+      row.className = 'log-row';
+      row.innerHTML = `
+        <span class="log-time">${time}</span>
+        <span class="log-code cat-${cmd.category}">${cmd.code}</span>
+        <span class="log-id">${cmd.command_id}</span>
+        <span class="log-hand">${cmd.hand === 'Left' ? 'L' : 'R'}</span>
+      `;
+      logEl.appendChild(row);
+      while (logEl.children.length > MAX_LOG_ROWS) {
+        logEl.removeChild(logEl.firstChild);
+      }
+    };
+  }
+
+  connect();
+</script>
+
+</body>
+</html>

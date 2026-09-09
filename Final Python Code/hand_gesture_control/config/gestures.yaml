@@ -1,0 +1,72 @@
+# تنظیمات دوربین، مدل و آستانه‌های تشخیص حرکات
+# تغییر این مقادیر نیاز به تغییر کد ندارد.
+
+camera:
+  index: 0
+  width: 640
+  height: 480
+  max_num_hands: 2              # ردیابی هم‌زمان هر دو دست (برای یک دست: 1 - سرعت بیشتر)
+  model_complexity: 0           # [دیگر در API جدید Tasks استفاده نمی‌شود - فقط برای سازگاری نگه داشته شده]
+  min_detection_confidence: 0.6
+  min_tracking_confidence: 0.5
+  # model_path: "models/hand_landmarker.task"   # اختیاری؛ خالی بماند تا خودکار دانلود شود
+
+movement:
+  history_len: 6                # تعداد فریم برای محاسبه بردار سرعت حرکت کلی دست
+  move_threshold: 0.035         # حداقل جابجایی نرمال‌شده برای تشخیص چپ/راست/بالا/پایین
+  depth_threshold: 0.06         # حداقل تغییر اندازه دست برای تشخیص جلو/عقب
+  cooldown: 0.35                # ثانیه بین دو دستور حرکتی متوالی
+
+fist:
+  curl_angle_threshold: 90      # درجه - کمتر از این یعنی انگشت کاملاً خم است
+
+pinch_rub:
+  pinch_distance: 0.045         # فاصله نرمال‌شده نوک شست تا نوک اشاره برای تشخیص "چسبیدن"
+  rub_path_threshold: 0.12      # مجموع مسیر طی‌شده نقطه میانی برای تشخیص مالش
+  window: 10                    # تعداد فریم پنجره بررسی مالش
+
+finger_swipe:
+  history_len: 6
+  swipe_threshold: 0.05
+  cooldown: 0.3
+
+thumbs:
+  curl_angle_threshold: 90
+
+open_palm_swipe:
+  history_len: 6
+  move_threshold: 0.05
+  cooldown: 0.35
+
+# پخش کامل داده اسکلتی (ریگ) دست، شبیه خروجی خام MediaPipe اما در قالب Command مستندسازی‌شده.
+# مناسب اتصال به مدل سه‌بعدی/ریگ کاراکتر/رباتیک که به همه نقاط دست نیاز دارد، نه فقط حرکات گسسته.
+hand_rig:
+  enabled: true
+  stream_rate_hz: 15        # نرخ ارسال، مستقل از fps دوربین (برای کنترل حجم لاگ/شبکه)
+
+# شکل هندسی بین دو دست (فقط وقتی هر دو دست هم‌زمان دیده شوند فعال می‌شود).
+# با حرکت دادن دست‌ها از هم دور/نزدیک، این چهارضلعی تغییر اندازه/زاویه می‌دهد -
+# روی تصویر هم به‌صورت خطوط سفید بین دو دست رسم می‌شود.
+two_hand_frame:
+  stream_rate_hz: 15
+
+output:
+  console:
+    enabled: true
+    mode: numeric                          # "numeric" = فقط کد عددی چاپ شود | "full" = خط کامل و خوانا
+    categories: ["movement", "gesture"]   # فریم‌های پرحجم دسته rig در کنسول چاپ نمی‌شوند
+  json_log:
+    enabled: true
+    path: "logs/commands_log.jsonl"
+    categories: null                      # null یعنی همه دسته‌ها (از جمله rig) ذخیره شوند
+  websocket:
+    enabled: true
+    host: "127.0.0.1"
+    port: 8765
+    categories: null                      # همه دسته‌ها بلادرنگ پخش شوند - این آدرس API اصلی است
+                                           # که هر برنامه دیگری (رباتیک/نرم‌افزار دیگر) به آن وصل می‌شود
+  web:
+    enabled: true
+    host: "127.0.0.1"
+    port: 8000                            # آدرس نمایشگر زنده در مرورگر: http://host:port
+    auto_open_browser: true               # با اجرای برنامه، خودکار در مرورگر باز شود

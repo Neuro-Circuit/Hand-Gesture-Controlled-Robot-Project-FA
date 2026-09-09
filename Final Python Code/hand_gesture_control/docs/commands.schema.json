@@ -1,0 +1,222 @@
+{
+  "hand.move.left": {
+    "command_id": "hand.move.left",
+    "code": 6,
+    "label_fa": "حرکت دست به چپ",
+    "label_en": "Hand Move Left",
+    "category": "movement",
+    "description": "مرکز کف دست به سمت چپ جابه‌جا می‌شود",
+    "params_schema": {
+      "speed": "float"
+    }
+  },
+  "hand.move.right": {
+    "command_id": "hand.move.right",
+    "code": 7,
+    "label_fa": "حرکت دست به راست",
+    "label_en": "Hand Move Right",
+    "category": "movement",
+    "description": "مرکز کف دست به سمت راست جابه‌جا می‌شود",
+    "params_schema": {
+      "speed": "float"
+    }
+  },
+  "hand.move.up": {
+    "command_id": "hand.move.up",
+    "code": 8,
+    "label_fa": "حرکت دست به بالا",
+    "label_en": "Hand Move Up",
+    "category": "movement",
+    "description": "مرکز کف دست به سمت بالا جابه‌جا می‌شود",
+    "params_schema": {
+      "speed": "float"
+    }
+  },
+  "hand.move.down": {
+    "command_id": "hand.move.down",
+    "code": 9,
+    "label_fa": "حرکت دست به پایین",
+    "label_en": "Hand Move Down",
+    "category": "movement",
+    "description": "مرکز کف دست به سمت پایین جابه‌جا می‌شود",
+    "params_schema": {
+      "speed": "float"
+    }
+  },
+  "hand.move.forward": {
+    "command_id": "hand.move.forward",
+    "code": 10,
+    "label_fa": "حرکت دست به جلو",
+    "label_en": "Hand Move Forward",
+    "category": "movement",
+    "description": "دست به دوربین نزدیک می‌شود (بر اساس بزرگ‌تر شدن اندازه دست)",
+    "params_schema": {
+      "speed": "float"
+    }
+  },
+  "hand.move.backward": {
+    "command_id": "hand.move.backward",
+    "code": 11,
+    "label_fa": "حرکت دست به عقب",
+    "label_en": "Hand Move Backward",
+    "category": "movement",
+    "description": "دست از دوربین دور می‌شود (بر اساس کوچک‌تر شدن اندازه دست)",
+    "params_schema": {
+      "speed": "float"
+    }
+  },
+  "hand.fist": {
+    "command_id": "hand.fist",
+    "code": 4,
+    "label_fa": "مشت کردن دست",
+    "label_en": "Fist",
+    "category": "gesture",
+    "description": "چهار انگشت اشاره تا کوچک کاملاً جمع می‌شوند",
+    "params_schema": {}
+  },
+  "hand.open": {
+    "command_id": "hand.open",
+    "code": 5,
+    "label_fa": "باز کردن دست",
+    "label_en": "Open Hand",
+    "category": "gesture",
+    "description": "دست از حالت مشت خارج و باز می‌شود",
+    "params_schema": {}
+  },
+  "hand.pinch.start": {
+    "command_id": "hand.pinch.start",
+    "code": 12,
+    "label_fa": "شروع نزدیک کردن شست و اشاره",
+    "label_en": "Pinch Start",
+    "category": "gesture",
+    "description": "نوک شست و نوک اشاره به هم نزدیک می‌شوند",
+    "params_schema": {}
+  },
+  "hand.pinch.rub": {
+    "command_id": "hand.pinch.rub",
+    "code": 13,
+    "label_fa": "مالیدن شست و اشاره به هم",
+    "label_en": "Pinch Rub",
+    "category": "gesture",
+    "description": "دو انگشت در حالت نزدیک، حرکت رفت‌وبرگشتی (مالش) انجام می‌دهند",
+    "params_schema": {
+      "intensity": "float"
+    }
+  },
+  "hand.pinch.end": {
+    "command_id": "hand.pinch.end",
+    "code": 14,
+    "label_fa": "پایان نزدیک کردن شست و اشاره",
+    "label_en": "Pinch End",
+    "category": "gesture",
+    "description": "",
+    "params_schema": {}
+  },
+  "finger.swipe.down": {
+    "command_id": "finger.swipe.down",
+    "code": 0,
+    "label_fa": "حرکت انگشت اشاره به پایین",
+    "label_en": "Finger Swipe Down",
+    "category": "gesture",
+    "description": "در حالت اشاره‌کردن، نوک انگشت اشاره به پایین حرکت می‌کند",
+    "params_schema": {
+      "speed": "float"
+    }
+  },
+  "finger.swipe.up": {
+    "command_id": "finger.swipe.up",
+    "code": 1,
+    "label_fa": "حرکت انگشت اشاره به بالا",
+    "label_en": "Finger Swipe Up",
+    "category": "gesture",
+    "description": "در حالت اشاره‌کردن، نوک انگشت اشاره به بالا حرکت می‌کند",
+    "params_schema": {
+      "speed": "float"
+    }
+  },
+  "finger.swipe.left": {
+    "command_id": "finger.swipe.left",
+    "code": 2,
+    "label_fa": "حرکت انگشت اشاره به چپ",
+    "label_en": "Finger Swipe Left",
+    "category": "gesture",
+    "description": "در حالت اشاره‌کردن، نوک انگشت اشاره به چپ حرکت می‌کند",
+    "params_schema": {
+      "speed": "float"
+    }
+  },
+  "finger.swipe.right": {
+    "command_id": "finger.swipe.right",
+    "code": 3,
+    "label_fa": "حرکت انگشت اشاره به راست",
+    "label_en": "Finger Swipe Right",
+    "category": "gesture",
+    "description": "در حالت اشاره‌کردن، نوک انگشت اشاره به راست حرکت می‌کند",
+    "params_schema": {
+      "speed": "float"
+    }
+  },
+  "hand.thumb.show": {
+    "command_id": "hand.thumb.show",
+    "code": 15,
+    "label_fa": "نشان دادن انگشت شست",
+    "label_en": "Thumb Shown",
+    "category": "gesture",
+    "description": "فقط انگشت شست کشیده و چهار انگشت دیگر جمع هستند",
+    "params_schema": {
+      "direction": "str"
+    }
+  },
+  "hand.thumb.hide": {
+    "command_id": "hand.thumb.hide",
+    "code": 16,
+    "label_fa": "پنهان شدن انگشت شست",
+    "label_en": "Thumb Hidden",
+    "category": "gesture",
+    "description": "",
+    "params_schema": {}
+  },
+  "hand.open_palm.swipe_right": {
+    "command_id": "hand.open_palm.swipe_right",
+    "code": 17,
+    "label_fa": "حرکت دست باز به راست",
+    "label_en": "Open Palm Swipe Right",
+    "category": "gesture",
+    "description": "تمام پنج انگشت باز هستند و کل دست به سمت راست حرکت می‌کند",
+    "params_schema": {
+      "speed": "float"
+    }
+  },
+  "hand.rig.frame": {
+    "command_id": "hand.rig.frame",
+    "code": 18,
+    "label_fa": "داده کامل ریگ دست",
+    "label_en": "Full Hand Rig Frame",
+    "category": "rig",
+    "description": "موقعیت هر ۲۱ نقطه دست (دقیقاً مطابق خروجی خام MediaPipe) به همراه زاویه خمیدگی و وضعیت کشیده/جمع هر انگشت، در هر فریم (یا با نرخ محدودشده) صادر می‌شود. برای اتصال به مدل سه‌بعدی/ریگ کاراکتر، رباتیک یا هر مصرف‌کننده‌ای که به داده خام نیاز دارد.",
+    "params_schema": {
+      "landmarks": "آرایه‌ای از ۲۱ نقطه [x, y, z] نرمال‌شده، به ترتیب استاندارد MediaPipe",
+      "landmarks_named": "همان ۲۱ نقطه با کلید نام مفصل (مثل INDEX_TIP)",
+      "finger_states": "دیکشنری بولین extended/curled برای هر انگشت",
+      "finger_curl_angles": "زاویه خمیدگی هر انگشت بر حسب درجه (180=کاملاً صاف)",
+      "palm_center": "[x, y, z] مرکز کف دست",
+      "hand_size": "اندازه تقریبی دست - قابل استفاده برای تخمین عمق/فاصله از دوربین"
+    }
+  },
+  "hands.pair.frame": {
+    "command_id": "hands.pair.frame",
+    "code": 19,
+    "label_fa": "شکل هندسی بین دو دست",
+    "label_en": "Two-Hand Frame Shape",
+    "category": "pair",
+    "description": "وقتی هر دو دست هم‌زمان دیده شوند، یک چهارضلعی بین نقاط مرجع دو دست (مچ و قاعده انگشت اشاره) ساخته می‌شود که با حرکت دست‌ها تغییر شکل/اندازه/زاویه می‌دهد - دقیقاً همان الگوی 'قاب‌گیری با دو دست' که در دموهای MediaPipe دیده می‌شود.",
+    "params_schema": {
+      "corners": "چهار نقطه گوشه به ترتیب [پایین‌چپ, بالاچپ, بالاراست, پایین‌راست]، هرکدام [x, y]",
+      "width": "فاصله نرمال‌شده بین مچ دو دست (مثلاً برای کنترل زوم قابل استفاده است)",
+      "height": "میانگین فاصله مچ تا قاعده انگشت اشاره هر دست",
+      "center": "[x, y] مرکز چهارضلعی",
+      "angle_deg": "زاویه شیب خط اتصال دو دست بر حسب درجه",
+      "area": "مساحت تقریبی چهارضلعی (نرمال‌شده، بین 0 و 1)"
+    }
+  }
+}
